@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="/fragments/resources :: head(pageTitle='Lista foto')">
+</head>
+<body>
+<header>
+    <nav th:replace="~{/fragments/navbar :: navbar(current='photos')}"></nav>
+</header>
+<main class="container">
+    <h1 class="text-secondary">Index</h1>
+</main>
+</body>
+</html>

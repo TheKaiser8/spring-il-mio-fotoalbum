@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<!-- fragment della navbar: current è il nome dell'area in cui sto navigando -->
+<nav class="navbar navbar-expand-lg bg-light mb-3" th:fragment="navbar(current)">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold text-secondary" th:href="@{/}">Il mio fotoalbum</a>
+        <button class="navbar-toggler border-white" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa-solid fa-bars text-secondary"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav navbar-nav-right d-flex align-items-center">
+                <!-- nei link appendo la classe active se l'area corrisponde a quella del link -->
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold text-secondary" th:href="@{/photos}">
+                        <span th:classappend="${current == 'photos' ? 'ms-active' : ''}">FOTO</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold text-secondary" href="#">
+                        <span>CATEGORIE</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+</html>
