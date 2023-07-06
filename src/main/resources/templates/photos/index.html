@@ -6,8 +6,45 @@
 <header>
     <nav th:replace="~{/fragments/navbar :: navbar(current='photos')}"></nav>
 </header>
-<main class="container">
-    <h1 class="text-secondary">Index</h1>
+<main class="container py-3">
+    <h1 class="fw-semibold text-secondary mb-4">Foto</h1>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <a href="#" class="btn btn-secondary fw-semibold mb-3 mb-sm-0"><i
+                class="fa-solid fa-plus me-1"></i> Nuova foto</a>
+        <!-- form di ricerca -->
+        <form action="" method="get">
+            <div class="input-group">
+                <input type="search" class="form-control shadow-none border-secondary" placeholder="Cerca per titolo"
+                       name="keyword"
+                       th:value="${searchInput}">
+                <button class="btn btn-outline-secondary" type="submit"><i
+                        class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div th:each="photo : ${photoList}" class="col-4 mb-5" th:object="${photo}">
+            <div class="card h-100" style="max-width: 20rem;">
+                <img th:src="*{url}" class="card-img-top img-thumbnail img-fluid" style="max-height: 18rem;"
+                     th:alt="*{title}">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div class="mb-3">
+                        <h5 th:text="*{title}" class="card-title"></h5>
+                        <p th:text="*{description}" class="card-text"></p>
+                        <span th:if="*{isVisible}" class="badge text-bg-success m-1">Visibile</span>
+                        <span th:unless="*{isVisible}" class="badge text-bg-danger m-1">Nascosta</span>
+                    </div>
+                    <!-- azioni -->
+                    <div class="text-center">
+                        <a href="#" class="btn btn-light my-1">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 </body>
 </html>
