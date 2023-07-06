@@ -22,7 +22,7 @@ public class PhotoController {
     // READ METHODS
     @GetMapping
     public String index(@RequestParam(name = "keyword", required = false) String searchString, Model model) {
-        List<Photo> photos = photoService.getAllWithOptParam(Optional.of(searchString));
+        List<Photo> photos = photoService.getAllWithOptParam(searchString == null ? Optional.empty() : Optional.of(searchString));
         model.addAttribute("photoList", photos);
         // aggiungo un altro attributo al model per mantenere il valore della input dopo l'invio della ricerca filtrata
         model.addAttribute("searchInput", searchString);
