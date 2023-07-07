@@ -21,8 +21,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fw-semibold text-secondary" href="#">
-                        <span>CATEGORIE</span>
+                    <a class="nav-link fw-semibold text-secondary" th:href="@{/categories}">
+                        <span th:classappend="${current == 'categories' ? 'ms-active' : ''}">CATEGORIE</span>
                     </a>
                 </li>
             </ul>

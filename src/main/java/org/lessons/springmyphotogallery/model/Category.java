@@ -16,8 +16,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Il titolo è obbligatorio, il campo non può essere vuoto")
-    @Size(min = 3, max = 100, message = "Il titolo deve avere un numero di caratteri compreso tra 3 e 100")
+    @NotBlank(message = "Il nome è obbligatorio, il campo non può essere vuoto")
+    @Size(min = 3, max = 50, message = "Il nome deve avere un numero di caratteri compreso tra 3 e 50")
     @Column(nullable = false, unique = true)
     private String name;
 

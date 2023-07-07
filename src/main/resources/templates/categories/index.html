@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/fragments/resources :: head(pageTitle='Lista categorie')}">
+</head>
+<body>
+<header>
+    <nav th:replace="~{/fragments/navbar :: navbar(current='categories')}"></nav>
+</header>
+<main class="container mb-3">
+    <h1 class="fw-semibold text-secondary mb-4">Elenco categorie</h1>
+    <div class="row flex-column flex-lg-row justify-content-between">
+        <!-- elenco categorie -->
+        <div class="col-lg-7 mb-4">
+            <ol class="list-group list-group-numbered" th:if="${categories.size > 0}">
+                <li class="list-group-item d-flex justify-content-between align-items-start"
+                    th:each="cat : ${categories}" th:object="${cat}">
+                    <div class="ms-2 me-auto">
+                        <h5 class="fw-bold d-inline-block me-2" th:text="*{name}"></h5>
+                        <span class="badge bg-primary rounded-pill align-text-top"
+                              th:text="|*{photos.size()} foto|"></span>
+                        <p th:text="*{description}"></p>
+                    </div>
+                </li>
+            </ol>
+            <!-- messaggio informativo se NON ci sono categorie -->
+            <div th:unless="${categories.size > 0}" class="alert alert-info">
+                <h4>Non sono presenti categorie</h4>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
