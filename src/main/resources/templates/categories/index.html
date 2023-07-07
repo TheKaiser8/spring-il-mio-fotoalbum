@@ -7,6 +7,12 @@
     <nav th:replace="~{/fragments/navbar :: navbar(current='categories')}"></nav>
 </header>
 <main class="container mb-3">
+    <!-- messaggio alert quando avviene un'azione -->
+    <div th:if="${message != null}" class="alert alert-dismissible fade show" role="alert"
+         th:classAppend="${#strings.equalsIgnoreCase(message.type, 'SUCCESS')} ? 'alert-success' : 'alert-danger'">
+        <span th:text="${message.message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <h1 class="fw-semibold text-secondary mb-4">Elenco categorie</h1>
     <div class="row flex-column flex-lg-row justify-content-between">
         <!-- elenco categorie -->
@@ -20,12 +26,18 @@
                               th:text="|*{photos.size()} foto|"></span>
                         <p th:text="*{description}"></p>
                     </div>
+                    <!-- azioni -->
                     <div class="mx-2 d-flex align-self-center">
                         <!-- passo il paramentro opzionale editCategory per avere i campi pre-caricati -->
                         <a th:href="@{/categories(editCategory=*{id})}"
                            class="btn btn-light me-1">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </a>
+                        <form class="" th:action="@{|/categories/delete/*{id}|}"
+                              method="post">
+                            <button class="btn btn-outline-danger" type="submit"><i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
                     </div>
                 </li>
             </ol>
@@ -35,8 +47,8 @@
             </div>
         </div>
         <!-- Form creazione/modifica categoria -->
-        <div class="col-lg-4">
-            <h3 class="fw-semibold text-secondary mb-3">Aggiungi categoria</h3>
+        <div class="col-lg-4" th:with="isEdit=${categoryObj.id != null}">
+            <h3 th:text="|${isEdit ? 'Modifica' : 'Nuova'} categoria|" class="fw-semibold text-secondary mb-3"></h3>
             <form th:action="@{/categories/save}"
                   th:object="${categoryObj}" method="post" id="category-form" class="row">
                 <!-- passo l'id della category al form come attributo nascosto per non creare un oggetto nuovo ad ogni modifica -->
