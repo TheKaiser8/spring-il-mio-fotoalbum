@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.lessons.springmyphotogallery.messages.AlertMessage;
 import org.lessons.springmyphotogallery.messages.AlertMessageType;
 import org.lessons.springmyphotogallery.model.Photo;
+import org.lessons.springmyphotogallery.repository.CategoryRepository;
 import org.lessons.springmyphotogallery.repository.PhotoRepository;
 import org.lessons.springmyphotogallery.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class PhotoController {
 
     @Autowired
     private PhotoRepository photoRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     PhotoService photoService;
@@ -46,11 +50,13 @@ public class PhotoController {
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("photo", new Photo());
+        // aggiungo al model la lista delle categorie per popolare le checkbox del form
+        getCategoryList(model);
         return "photos/form";
     }
 
     @PostMapping("/create")
-    public String store(@Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String store(@Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         // verifico se in validazione ci sono stati errori
         // se NON ci sono stati errori
         if (!bindingResult.hasErrors()) {
@@ -58,6 +64,8 @@ public class PhotoController {
         }
         // se ci sono stati errori restituisco il form con i campi precompilati
         if (bindingResult.hasErrors()) {
+            // aggiungo al model la lista delle categorie per popolare le checkbox del form
+            getCategoryList(model);
             return "photos/form";
         }
 
@@ -72,15 +80,19 @@ public class PhotoController {
     public String edit(@PathVariable("id") Integer photoId, Model model) {
         Photo photo = photoService.getById(photoId);
         model.addAttribute("photo", photo);
+        // aggiungo al model la lista delle categorie per popolare le checkbox del form
+        getCategoryList(model);
         return "photos/form";
     }
 
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable("id") Integer photoId, @Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String update(@PathVariable("id") Integer photoId, @Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         // cerco per id la versione vecchia della foto da modificare
         Photo photoToEdit = photoService.getById(photoId);
         // se ci sono stati errori restituisco il form con i campi precompilati
         if (bindingResult.hasErrors()) {
+            // aggiungo al model la lista delle categorie per popolare le checkbox del form
+            getCategoryList(model);
             return "photos/form";
         }
         // trasferisco su formPhoto tutti i valori dei campi che non sono presenti o non sono modificabili nel form (altrimenti vengono persi)
@@ -104,5 +116,11 @@ public class PhotoController {
         redirectAttributes.addFlashAttribute("message", new AlertMessage(AlertMessageType.SUCCESS, "La foto " + "\"" + photoToDelete.getTitle() + "\"" + " è stata cancellata!"));
         // facciamo la redirect alla lista delle pizze
         return "redirect:/photos";
+    }
+
+    // UTILITY METHODS
+    // metodo per aggiungere al model la lista delle categorie
+    private void getCategoryList(Model model) {
+        model.addAttribute("categoryList", categoryRepository.findAll());
     }
 }

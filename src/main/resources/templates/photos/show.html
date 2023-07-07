@@ -16,6 +16,18 @@
                 <div class="mb-3">
                     <h5 th:text="*{title}" class="card-title fw-semibold"></h5>
                     <p th:text="*{description}" class="card-text"></p>
+                    a
+                    <div class="mb-3">
+                        <div class="card-header">
+                            <strong>Categorie</strong>
+                        </div>
+                        <ul th:if="*{categories.size() > 0}" class="list-group list-group-flush">
+                            <li th:each="cat : *{categories}" th:text="${cat.name}" class="list-group-item"></li>
+                        </ul>
+                        <div class="alert alert-info" th:unless="*{categories.size() > 0}">
+                            Non sono presenti categorie associate
+                        </div>
+                    </div>
                     <div class="mb-3">
                         <strong>Visibilità: </strong>
                         <span th:if="*{isVisible}" th:text="Pubblica" class="badge text-bg-success m-1"></span>

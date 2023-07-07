@@ -4,14 +4,17 @@ import jakarta.validation.Valid;
 import org.lessons.springmyphotogallery.messages.AlertMessage;
 import org.lessons.springmyphotogallery.messages.AlertMessageType;
 import org.lessons.springmyphotogallery.model.Category;
+import org.lessons.springmyphotogallery.model.Photo;
 import org.lessons.springmyphotogallery.repository.CategoryRepository;
 import org.lessons.springmyphotogallery.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -85,7 +88,21 @@ public class CategoryController {
     // metodo delete per cancellare la categoria da database
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer categoryId, RedirectAttributes redirectAttributes) {
+        // prima di eliminare la categoria la dissocio da tutte le categorie
+        Optional<Category> result = categoryRepository.findById(categoryId);
+        if (result.isEmpty()) {
+            // ritorno un HTTP Status 404 Not Found
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La categoria con ID " + categoryId + " non è stata trovata");
+        }
+        // ottengo l'oggetto categoria da eliminare
+        Category categoryToDelete = result.get();
+        // itero su ogni foto associata alla categoria per eliminare la categoria
+        for (Photo photo : categoryToDelete.getPhotos()) {
+            photo.getCategories().remove(categoryToDelete);
+        }
         categoryRepository.deleteById(categoryId);
+        // aggiungo un messaggio di successo come flash attribute utilizzando un classe CUSTOM per personalizzare i messaggi degli alert
+        redirectAttributes.addFlashAttribute("message", new AlertMessage(AlertMessageType.SUCCESS, "La categoria " + "\"" + categoryToDelete.getName() + "\"" + " è stata cancellata!"));
         return "redirect:/categories";
     }
 

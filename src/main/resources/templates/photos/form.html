@@ -11,7 +11,7 @@
         th:text="|${isEdit ? 'Modifica' : 'Nuova'} foto|"></h1>
     <!-- form di creazione/modifica foto -->
     <form th:with="formAction=${isEdit ? '/photos/edit/'+ photo.id : '/photos/create'}" th:action="@{${formAction}}"
-          method="post" id="foto-form">
+          th:object="${photo}" method="post" id="foto-form" class="row flex-column flex-sm-row justify-content-between">
         <!-- campi foto -->
         <div class="col-sm-7">
             <div class="col-12 mb-3">
@@ -58,6 +58,20 @@
                     <ul>
                         <li th:each="err : ${#fields.errors('visible')}" th:text="${err}"></li>
                     </ul>
+                </div>
+            </div>
+        </div>
+        <!-- campi categorie -->
+        <div class="col-sm-4">
+            <h4 class="fw-semibold text-secondary mb-3">Categorie</h4>
+            <div class="d-flex flex-wrap flex-sm-column">
+                <div class="form-check me-4" th:each="cat : ${categoryList}">
+                    <!-- oggetto categoryList per passare tutte le categorie per popolare le checkbox -->
+                    <input class="form-check-input" type="checkbox" th:value="${cat.id}" th:id="|cat_${cat.id}|"
+                           th:field="*{categories}">
+                    <!-- per avere gli id univoci della input concateno la stringa con un parametro dinamico -->
+                    <label class="form-check-label" th:for="|cat_${cat.id}|" th:text="${cat.name}">
+                    </label>
                 </div>
             </div>
         </div>

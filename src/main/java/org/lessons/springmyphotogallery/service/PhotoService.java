@@ -50,8 +50,8 @@ public class PhotoService {
         photoToPersist.setDescription(photo.getDescription());
         photoToPersist.setUrl(photo.getUrl());
         photoToPersist.setVisible(photo.isVisible());
+        photoToPersist.setCategories(photo.getCategories());
         // persisto la foto
         return photoRepository.save(photoToPersist);
     }
-
 }
