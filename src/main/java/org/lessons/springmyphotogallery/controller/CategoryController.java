@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,22 +24,40 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
-    // metodo che restituisce la lista delle categorie
+    // metodo index che restituisce sia la lista delle categorie che il form per creare o modificare una categoria
+    // aggiungo un parametro opzionale con l'id della categoria che voglio modificare
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model, @RequestParam("editCategory") Optional<Integer> categoryId) {
         List<Category> categoryList = categoryRepository.findAll();
         model.addAttribute("categories", categoryList);
+
+        // definisco un oggetto Category per creare una condizione in cui verifico che form (categoryObj) restituire
+        Category categoryObj;
+        // se ho il parametro categoryId cerco la categoria corrispondente su database
+        if (categoryId.isPresent()) {
+            Optional<Category> categoryDb = categoryRepository.findById(categoryId.get());
+            // se è presente l'oggetto su db, categoryObj diventa l'oggetto categoryDb
+            if (categoryDb.isPresent()) {
+                categoryObj = categoryDb.get();
+            } else {
+                // se NON è presente l'oggetto su db, categoryObj diventa un nuovo oggetto vuoto
+                categoryObj = new Category();
+            }
+        } else {
+            // se NON ho il parametro opzionale, categoryObj diventa un nuovo oggetto vuoto
+            categoryObj = new Category();
+        }
         // passo al model un attributo categoryObj per mappare il form su un oggetto di tipo Category
-        model.addAttribute("categoryObj", new Category());
+        model.addAttribute("categoryObj", categoryObj);
         return "categories/index";
     }
 
     // metodo save per salvare su database l'attributo formCategory
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute("categoryObj") Category formCategory, BindingResult bindingResult, Model model) {
-        // verifichiamo se ci sono errori
-        // se il nome NON è univoco
-        if (!isUniqueName(formCategory)) {
+        // verifico l'id della formCategory per capire se mi trovo nella create (avrò id == null) o nella edit
+        // e verifico che il nome sia univoco
+        if (formCategory.getId() == null && !isUniqueName(formCategory)) {
             // aggiungo errore nella mappa BindingResult
             bindingResult.addError(new FieldError("categoryObj", "name", formCategory.getName(), false, null, null,
                     "Il nome della categoria deve essere univoco. Esiste già una categoria con questo nome."));
