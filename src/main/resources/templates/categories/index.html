@@ -27,6 +27,49 @@
                 <h4>Non sono presenti categorie</h4>
             </div>
         </div>
+        <!-- Form creazione/modifica categoria -->
+        <div class="col-lg-4">
+            <h3 class="fw-semibold text-secondary mb-3">Aggiungi categoria</h3>
+            <form th:action="@{/categories/save}"
+                  th:object="${categoryObj}" method="post" id="category-form" class="row">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold" for="name">Nome*</label>
+                    <input class="form-control" type="text" id="name" th:field="*{name}"
+                           th:errorClass="is-invalid"
+                           placeholder="Inserisci il nome della categoria...">
+                    <div class="form-text">
+                        Il campo nome non può essere vuoto, deve avere un numero di caratteri compreso tra 3 e 50 e
+                        deve essere univoco
+                    </div>
+                    <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('name')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold" for="description">Descrizione</label>
+                    <textarea class="form-control" id="description" th:field="*{description}"
+                              th:errorClass="is-invalid"
+                              rows="5" placeholder="Inserisci la descrizione della categoria..."></textarea>
+                    <div class="form-text">La descrizione non può superare i 500 caratteri</div>
+                    <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <button class="btn btn-success fw-semibold me-2" type="submit"><i
+                            class="fa-solid fa-check me-1"></i> Salva
+                    </button>
+                    <!-- rimando alla pagina di dettaglio della foto -->
+                    <a class="btn btn-light fw-semibold" th:href="@{/categories}" type="reset"><i
+                            class="fa-solid fa-delete-left me-1"></i>
+                        Annulla</a>
+                </div>
+            </form>
+        </div>
     </div>
 </main>
 </body>

@@ -21,7 +21,7 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Size(min = 3, max = 500, message = "La descrizione deve avere un numero di caratteri compreso tra 3 e 500")
+    @Size(max = 500, message = "La descrizione non può superare i 500 caratteri")
     @Column(columnDefinition = "TEXT")
     private String description;
 
