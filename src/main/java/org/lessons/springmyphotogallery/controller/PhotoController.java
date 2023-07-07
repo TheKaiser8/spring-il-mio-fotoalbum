@@ -1,14 +1,16 @@
 package org.lessons.springmyphotogallery.controller;
 
+import jakarta.validation.Valid;
+import org.lessons.springmyphotogallery.messages.AlertMessage;
+import org.lessons.springmyphotogallery.messages.AlertMessageType;
 import org.lessons.springmyphotogallery.model.Photo;
 import org.lessons.springmyphotogallery.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -35,5 +37,29 @@ public class PhotoController {
         model.addAttribute("photo", photo);
         return "photos/show";
     }
-    
+
+    // CREATE METHODS
+    @GetMapping("/create")
+    public String create(Model model) {
+        model.addAttribute("photo", new Photo());
+        return "photos/form";
+    }
+
+    @PostMapping("/create")
+    public String store(@Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        // verifico se in validazione ci sono stati errori
+        // se NON ci sono stati errori
+        if (!bindingResult.hasErrors()) {
+            photoService.create(formPhoto); // salvo la foto su database utilizzando il Service
+        }
+        // se ci sono stati errori restituisco il form con i campi precompilati
+        if (bindingResult.hasErrors()) {
+            return "photos/form";
+        }
+
+        // aggiungo un messaggio di successo come flash attribute utilizzando un classe CUSTOM per personalizzare i messaggi degli alert
+        redirectAttributes.addFlashAttribute("message", new AlertMessage(AlertMessageType.SUCCESS, "La foto " + "\"" + formPhoto.getTitle() + "\"" + " è stata creata!"));
+        // se l'operazione va a buon fine rimando alla lista delle foto
+        return "redirect:/photos";
+    }
 }

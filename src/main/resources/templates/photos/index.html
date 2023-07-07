@@ -7,9 +7,15 @@
     <nav th:replace="~{/fragments/navbar :: navbar(current='photos')}"></nav>
 </header>
 <main class="container py-3">
+    <!-- messaggio alert quando avviene un'azione -->
+    <div th:if="${message != null}" class="alert alert-dismissible fade show" role="alert"
+         th:classAppend="${#strings.equalsIgnoreCase(message.type, 'SUCCESS')} ? 'alert-success' : 'alert-danger'">
+        <span th:text="${message.message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <h1 class="fw-semibold text-secondary mb-4">Foto</h1>
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <a href="#" class="btn btn-secondary fw-semibold mb-3 mb-sm-0"><i
+        <a th:href="@{/photos/create}" class="btn btn-secondary fw-semibold mb-3 mb-sm-0"><i
                 class="fa-solid fa-plus me-1"></i> Nuova foto</a>
         <!-- form di ricerca -->
         <form action="" method="get">
@@ -24,7 +30,7 @@
         </form>
     </div>
     <div class="row">
-        <div th:each="photo : ${photoList}" class="col-4 mb-5" th:object="${photo}">
+        <div th:if="${photoList.size() > 0}" th:each="photo : ${photoList}" class="col-4 mb-5" th:object="${photo}">
             <div class="card h-100" style="max-width: 20rem;">
                 <img th:src="*{url}" class="card-img-top img-thumbnail img-fluid" style="max-height: 18rem;"
                      th:alt="*{title}">
@@ -43,6 +49,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- messaggio informativo se la lista foto è vuota -->
+        <div th:unless="${photoList.size() > 0}" class="alert alert-info fs-3" role="alert">
+            La tua lista foto è vuota!
         </div>
     </div>
 </main>

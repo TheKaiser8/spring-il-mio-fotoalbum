@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/fragments/resources :: head(pageTitle='Form foto')}">
+</head>
+<body th:with="isEdit=${photo.id != null}">
+<header>
+    <nav th:replace="~{/fragments/navbar :: navbar(current='photos')}"></nav>
+</header>
+<main class="container mb-3" th:object="${photo}">
+    <h1 class="fw-semibold text-secondary mb-3"
+        th:text="|${isEdit ? 'Modifica' : 'Nuova'} foto|"></h1>
+    <!-- form di creazione/modifica foto -->
+    <form th:with="formAction=${isEdit ? '/photos/edit/'+ photo.id : '/photos/create'}" th:action="@{${formAction}}"
+          method="post" id="foto-form">
+        <!-- campi foto -->
+        <div class="col-sm-7">
+            <div class="col-12 mb-3">
+                <label class="form-label fw-semibold" for="title">Titolo*</label>
+                <input class="form-control" type="text" id="title" th:field="*{title}" th:errorClass="is-invalid"
+                       placeholder="Inserisci il titolo della foto...">
+                <div class="form-text">
+                    Il campo titolo non può essere vuoto e deve avere un numero di caratteri compreso tra 3 e 100
+                </div>
+                <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('title')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 mb-3">
+                <label class="form-label fw-semibold" for="description">Descrizione</label>
+                <textarea class="form-control" id="description" th:field="*{description}" th:errorClass="is-invalid"
+                          rows="5" placeholder="Inserisci la descrizione della foto..."></textarea>
+                <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 mb-3">
+                <label class="form-label fw-semibold" for="url">Url foto*</label>
+                <input class="form-control" type="text" id="url" th:field="*{url}" th:errorClass="is-invalid"
+                       placeholder="Esempio: https://lamiafoto.com/ oppure il percorso del tuo file ">
+                <div class="form-text">Il campo URL della foto non può essere vuoto</div>
+                <div th:if="${#fields.hasErrors('url')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('url')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4 mb-3">
+                <label class="form-label fw-semibold" for="is_visible">Visibilità*</label>
+                <select th:field="*{visible}" name="is_visible" id="is_visible" class="form-select">
+                    <option th:value="1" th:text="Pubblica" th:selected="*{visible == 1}"></option>
+                    <option th:value="0" th:text="Privata" th:selected="*{visible == 0}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('visible')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('visible')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mt-3">
+            <button class="btn btn-success fw-semibold me-2" type="submit"><i class="fa-solid fa-check me-1"></i> Salva
+            </button>
+            <a class="btn btn-primary fw-semibold" th:href="@{/photos}"><i class="fa-solid fa-delete-left me-1"></i>
+                Annulla</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

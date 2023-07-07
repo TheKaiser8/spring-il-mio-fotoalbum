@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,22 @@ public class PhotoService {
             // ritorno un HTTP Status 404 Not Found
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La foto con ID " + id + " non è stata trovata");
         }
+    }
+
+    // metodo che salva una nuova foto a partire da quella passata come parametro
+    public Photo create(Photo photo) {
+        // istanzio nuova foto da salvare
+        Photo photoToPersist = new Photo();
+        // genero il timestamp di createdAt
+        photoToPersist.setCreatedAt(LocalDateTime.now());
+        // setto tutti i campi che mi interessano
+        photoToPersist.setId(photo.getId());
+        photoToPersist.setTitle(photo.getTitle());
+        photoToPersist.setDescription(photo.getDescription());
+        photoToPersist.setUrl(photo.getUrl());
+        photoToPersist.setVisible(photo.isVisible());
+        // persisto la foto
+        return photoRepository.save(photoToPersist);
     }
 
 }
