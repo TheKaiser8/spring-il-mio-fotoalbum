@@ -49,6 +49,12 @@
                         <a th:href="@{|/photos/edit/*{id}|}" class="btn btn-light my-1">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </a>
+                        <!-- button per cancellare la foto -->
+                        <form class="d-inline-block" th:action="@{|/photos/delete/*{id}|}"
+                              method="post">
+                            <button class="btn btn-outline-danger" type="submit"><i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -67,6 +67,7 @@ public class PhotoController {
         return "redirect:/photos";
     }
 
+    // EDIT METHODS
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer photoId, Model model) {
         Photo photo = photoService.getById(photoId);
@@ -76,7 +77,7 @@ public class PhotoController {
 
     @PostMapping("/edit/{id}")
     public String update(@PathVariable("id") Integer photoId, @Valid @ModelAttribute("photo") Photo formPhoto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        // cerco per id la versione vecchia della pizza da modificare
+        // cerco per id la versione vecchia della foto da modificare
         Photo photoToEdit = photoService.getById(photoId);
         // se ci sono stati errori restituisco il form con i campi precompilati
         if (bindingResult.hasErrors()) {
@@ -89,6 +90,19 @@ public class PhotoController {
         photoRepository.save(formPhoto);
         // aggiungo un messaggio di successo come flash attribute utilizzando un classe CUSTOM per personalizzare i messaggi degli alert
         redirectAttributes.addFlashAttribute("message", new AlertMessage(AlertMessageType.SUCCESS, "La foto " + "\"" + formPhoto.getTitle() + "\"" + " è stata aggiornata!"));
+        return "redirect:/photos";
+    }
+
+    // DELETE METHOD
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Integer photoId, RedirectAttributes redirectAttributes) {
+        // verifico tramite ricerca per id se esiste la foto da cancellare
+        Photo photoToDelete = photoService.getById(photoId);
+        // cancello la foto da database
+        photoRepository.delete(photoToDelete);
+        // aggiungo un messaggio di successo come flash attribute utilizzando un classe CUSTOM per personalizzare i messaggi degli alert
+        redirectAttributes.addFlashAttribute("message", new AlertMessage(AlertMessageType.SUCCESS, "La foto " + "\"" + photoToDelete.getTitle() + "\"" + " è stata cancellata!"));
+        // facciamo la redirect alla lista delle pizze
         return "redirect:/photos";
     }
 }
