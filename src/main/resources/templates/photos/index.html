@@ -32,12 +32,12 @@
                     <div class="mb-3">
                         <h5 th:text="*{title}" class="card-title"></h5>
                         <p th:text="*{description}" class="card-text"></p>
-                        <span th:if="*{isVisible}" class="badge text-bg-success m-1">Visibile</span>
-                        <span th:unless="*{isVisible}" class="badge text-bg-danger m-1">Nascosta</span>
+                        <span th:if="*{isVisible}" th:text="Pubblica" class="badge text-bg-success m-1"></span>
+                        <span th:unless="*{isVisible}" th:text="Privata" class="badge text-bg-danger m-1"></span>
                     </div>
                     <!-- azioni -->
                     <div class="text-center">
-                        <a href="#" class="btn btn-light my-1">
+                        <a th:href="@{|/photos/*{id}|}" class="btn btn-light my-1">
                             <i class="fa-solid fa-eye"></i>
                         </a>
                     </div>
