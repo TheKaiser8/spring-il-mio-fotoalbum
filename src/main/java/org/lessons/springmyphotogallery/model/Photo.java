@@ -37,6 +37,7 @@ public class Photo {
     @Lob
 //    @NotNull(message = "La foto è obbligatoria, il campo non può essere vuoto")
     @Column(length = 16777215) // lunghezza 16 MB (MEDIUMBLOB)
+    // il campo NON è nullable = false per avere delle immagini iniziali da mostrare tramite url (campo da migliorare con Command Line Runner)
     private byte[] urlUpload;
 
     // RELATIONSHIP ATTRIBUTES

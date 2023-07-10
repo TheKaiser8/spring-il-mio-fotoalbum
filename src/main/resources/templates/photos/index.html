@@ -18,7 +18,7 @@
         <a th:href="@{/photos/create}" class="btn btn-secondary fw-semibold mb-3 mb-sm-0"><i
                 class="fa-solid fa-plus me-1"></i> Nuova foto</a>
         <!-- form di ricerca -->
-        <form action="" method="get">
+        <form th:action="@{/photos}" method="get">
             <div class="input-group">
                 <input type="search" class="form-control shadow-none border-secondary" placeholder="Cerca per titolo"
                        name="keyword"
