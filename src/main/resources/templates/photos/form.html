@@ -11,7 +11,8 @@
         th:text="|${isEdit ? 'Modifica' : 'Nuova'} foto|"></h1>
     <!-- form di creazione/modifica foto -->
     <form th:with="formAction=${isEdit ? '/photos/edit/'+ photo.id : '/photos/create'}" th:action="@{${formAction}}"
-          th:object="${photo}" method="post" id="foto-form" class="row flex-column flex-sm-row justify-content-between">
+          th:object="${photo}" method="post" id="foto-form" class="row flex-column flex-sm-row justify-content-between"
+          enctype="multipart/form-data"> <!-- aggiungo l'attributo enctype per permettere al form di inviare file -->
         <!-- campi foto -->
         <div class="col-sm-7">
             <div class="col-12 mb-3">
@@ -37,16 +38,34 @@
                     </ul>
                 </div>
             </div>
+            <!-- url foto -->
+            <!--            <div class="col-12 mb-3">-->
+            <!--                <label class="form-label fw-semibold" for="url">Url foto*</label>-->
+            <!--                <input class="form-control" type="text" id="url" th:field="*{url}" th:errorClass="is-invalid"-->
+            <!--                       placeholder="Esempio: https://lamiafoto.com/ oppure il percorso del tuo file ">-->
+            <!--                <div class="form-text">Il campo URL della foto non può essere vuoto</div>-->
+            <!--                <div th:if="${#fields.hasErrors('url')}" class="invalid-feedback">-->
+            <!--                    <ul>-->
+            <!--                        <li th:each="err : ${#fields.errors('url')}" th:text="${err}"></li>-->
+            <!--                    </ul>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!-- cover foto -->
             <div class="col-12 mb-3">
-                <label class="form-label fw-semibold" for="url">Url foto*</label>
-                <input class="form-control" type="text" id="url" th:field="*{url}" th:errorClass="is-invalid"
-                       placeholder="Esempio: https://lamiafoto.com/ oppure il percorso del tuo file ">
-                <div class="form-text">Il campo URL della foto non può essere vuoto</div>
-                <div th:if="${#fields.hasErrors('url')}" class="invalid-feedback">
-                    <ul>
-                        <li th:each="err : ${#fields.errors('url')}" th:text="${err}"></li>
-                    </ul>
+                <label for="urlFile" class="form-label fw-semibold">File foto*</label>
+                <div th:if="*{urlFile}" class="mb-3">
+                    <img th:src="@{|/files/url/*{id}|}" alt="current url" class="w-25">
                 </div>
+                <div th:if="*{url}" class="mb-3">
+                    <img th:src="*{url}" alt="current url" class="w-25">
+                </div>
+                <input class="form-control" type="file" id="urlFile" th:field="*{urlFile}"
+                       th:errorClass="is-invalid">
+            </div>
+            <div th:if="${#fields.hasErrors('urlFile')}" class="invalid-feedback">
+                <ul>
+                    <li th:each="err : ${#fields.errors('urlFile')}" th:text="${err}"></li>
+                </ul>
             </div>
             <div class="col-12 col-md-6 col-xl-4 mb-3">
                 <label class="form-label fw-semibold" for="is_visible">Visibilità*</label>

@@ -34,7 +34,11 @@
              class="d-flex justify-content-center col-md-6 col-lg-4 mb-5"
              th:object="${photo}">
             <div class="card h-100 w-100" style="max-width: 20rem;">
-                <img th:src="*{url}" class="card-img-top img-thumbnail img-fluid" style="max-height: 18rem;"
+                <img th:if="*{urlUpload}" th:src="@{|/files/url/*{id}|}" class="card-img-top img-thumbnail img-fluid"
+                     style="max-height: 18rem;"
+                     th:alt="*{title}">
+                <img th:unless="*{urlUpload}" th:src="*{url}" class="card-img-top img-thumbnail img-fluid"
+                     style="max-height: 18rem;"
                      th:alt="*{title}">
                 <div class="card-body d-flex flex-column">
                     <div class="mb-3">
