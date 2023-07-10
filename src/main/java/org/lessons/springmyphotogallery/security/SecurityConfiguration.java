@@ -2,6 +2,7 @@ package org.lessons.springmyphotogallery.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -52,12 +53,15 @@ public class SecurityConfiguration {
                 .requestMatchers("/photos/create").hasAuthority("ADMIN")
                 .requestMatchers("/photos/edit/**").hasAuthority("ADMIN")
                 .requestMatchers("/photos/delete/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/photos/**").hasAnyAuthority("ADMIN") // limito la protezione a /photos/** per poter esporre le api
                 .requestMatchers("/photos").permitAll()
                 .requestMatchers("/photos/{id}").permitAll()
                 .requestMatchers("/categories/**").hasAuthority("ADMIN")
                 .requestMatchers("/**").permitAll()
                 .and().formLogin()
                 .and().logout();
+        // disabilito csrf per poter invocare le api da Postman
+        http.csrf().disable();
         return http.build();
     }
 }

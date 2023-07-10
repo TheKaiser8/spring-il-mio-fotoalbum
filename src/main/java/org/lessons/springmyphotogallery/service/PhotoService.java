@@ -1,11 +1,10 @@
 package org.lessons.springmyphotogallery.service;
 
+import org.lessons.springmyphotogallery.exceptions.PhotoNotFoundException;
 import org.lessons.springmyphotogallery.model.Photo;
 import org.lessons.springmyphotogallery.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,13 +27,13 @@ public class PhotoService {
     }
 
     // metodo che restituisce, se presente, la foto presa per id oppure lancia un'eccezione
-    public Photo getById(Integer id) throws ResponseStatusException {
+    public Photo getById(Integer id) throws PhotoNotFoundException {
         Optional<Photo> photoOpt = photoRepository.findById(id);
         if (photoOpt.isPresent()) {
             return photoOpt.get();
         } else {
-            // ritorno un HTTP Status 404 Not Found
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La foto con ID " + id + " non è stata trovata");
+            // ritorno un eccezione CUSTOM
+            throw new PhotoNotFoundException("La foto con ID " + id + " non è stata trovata");
         }
     }
 
