@@ -9,4 +9,11 @@ public interface PhotoRepository extends JpaRepository<Photo, Integer> {
     // QUERY CUSTOM
     // metodo per filtrare le foto il cui titolo contiene una stringa
     List<Photo> findByTitleContainingIgnoreCase(String title);
+
+    // metodo per ottenere solo le foto pubbliche e filtrarle attraverso la stringa titolo
+    List<Photo> findByTitleContainingIgnoreCaseAndIsVisibleTrue(String title);
+
+
+    // metodo per ottenere solo le foto pubbliche
+    List<Photo> findByIsVisibleTrue();
 }

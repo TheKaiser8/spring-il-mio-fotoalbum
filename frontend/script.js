@@ -52,7 +52,7 @@ const createPhotoCard = function (photo) {
 
   return `<div class="d-flex justify-content-center col-md-6 col-lg-4 mb-5">
             <div class="card h-100 w-100" style="max-width: 20rem;">
-              <img src="http://localhost:8080/${imageUrl}" class="card-img-top img-thumbnail img-fluid" style="max-height: 18rem;" alt="${photo.title}">
+              <img src="http://localhost:8080${imageUrl}" class="card-img-top img-thumbnail img-fluid" style="max-height: 18rem;" alt="${photo.title}">
               <div class="card-body d-flex flex-column">
                 <div class="mb-3">
                   <h5 class="card-title">${photo.title}</h5>
@@ -74,7 +74,7 @@ const loadData = async (keyword = "") => {
   // prendo i dati dall'API
   const data = await getPhotos(keyword);
   // con quei dati costruisco il content
-  // appendo il contente nel DOM
+  // appendo il content nel DOM
   contentDOM.innerHTML = createPhotoList(data);
 };
 

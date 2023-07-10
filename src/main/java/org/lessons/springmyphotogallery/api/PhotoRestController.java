@@ -23,10 +23,16 @@ public class PhotoRestController {
     @Autowired
     private PhotoService photoService;
 
-    // servizio per avere la lista delle foto con parametro opzionale di ricerca
+//    // servizio per avere la lista delle foto con parametro opzionale di ricerca
+//    @GetMapping
+//    public List<Photo> index(@RequestParam(name = "keyword", required = false) String keyword) {
+//        return photoService.getAllWithOptParam(keyword);
+//    }
+
+    // servizio per avere la lista delle foto visibili con parametro opzionale di ricerca
     @GetMapping
     public List<Photo> index(@RequestParam(name = "keyword", required = false) String keyword) {
-        return photoService.getAllWithOptParam(keyword);
+        return photoService.getVisiblePhotosWithOptParam(keyword);
     }
 
     // servizio per avere i dettagli della singola foto

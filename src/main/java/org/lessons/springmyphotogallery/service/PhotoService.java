@@ -29,6 +29,16 @@ public class PhotoService {
         }
     }
 
+    // metodo che restituisce la lista foto visibili, filtrata o no a seconda del parametro OPZIONALE
+    public List<Photo> getVisiblePhotosWithOptParam(String searchString) {
+        Optional<String> keywordOpt = Optional.ofNullable(searchString); // se il parametro è nullo ritorno un Optional object vuoto
+        if (keywordOpt.isEmpty()) {
+            return photoRepository.findByIsVisibleTrue();
+        } else {
+            return photoRepository.findByTitleContainingIgnoreCaseAndIsVisibleTrue(keywordOpt.get());
+        }
+    }
+
     // metodo che restituisce, se presente, la foto presa per id oppure lancia un'eccezione
     public Photo getById(Integer id) throws PhotoNotFoundException {
         Optional<Photo> photoOpt = photoRepository.findById(id);
@@ -88,7 +98,7 @@ public class PhotoService {
 
         return photoRepository.save(photoDb);
     }
-    
+
     // metodo per convertire un PhotoForm in una Photo
     private Photo mapPhotoFormToPhoto(PhotoForm photoForm) {
         // creo una nuova foto vuota
